@@ -1,45 +1,43 @@
 pipeline {
     agent any
 
-    environment{
+    environment {
         NODE_VERSION = '22.X'
     }
 
     tools {
-        node.js "${NODE_VERSION}"
+        nodejs 'NodeJS' // Ensure Node.js is configured in Global Tool Configuration
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git: branch: 'main', url: 'https://github.com/Maria789789/StudentRegestryApp'
+                git branch: 'main', url: 'https://github.com/Maria789789/StudentRegestryApp'
             }
         }
 
-        stage('Install dependecies') {
-            steps{
-                script{
-                  
-                        bat 'npm install'
-                    
+        stage('Install Dependencies') {
+            steps {
+                script {
+                    bat 'npm install' // Ensure this runs on a Windows agent
                 }
             }
         }
 
-        stage('Start application and run tests') {
+        stage('Start Application and Run Tests') {
             steps {
-                script{
-                    bat 'npm start &'
-                    bat 'wait-on http://localhost:8080'
-                    bat 'npm test'
+                script {
+                    bat 'npm start &' // Starts the application in the background
+                    bat 'wait-on http://localhost:8090' // Waits for the app to become available
+                    bat 'npm test' // Runs the tests
                 }
             }
         }
     }
 
     post {
-        always{
-            acho 'CI pipeline completed'
+        always {
+            echo 'CI pipeline completed'
         }
     }
 }
