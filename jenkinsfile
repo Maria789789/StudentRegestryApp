@@ -6,7 +6,7 @@ pipeline {
     }
 
     tools {
-        nodejs 'NodeJS' // Ensure Node.js is configured in Global Tool Configuration
+        nodejs "${NODE_VERSION}"
     }
 
     stages {
@@ -19,7 +19,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 script {
-                    bat 'npm install' // Ensure this runs on a Windows agent
+                    bat 'npm install' 
                 }
             }
         }
@@ -27,9 +27,9 @@ pipeline {
         stage('Start Application and Run Tests') {
             steps {
                 script {
-                    bat 'npm start &' // Starts the application in the background
-                    bat 'wait-on http://localhost:8090' // Waits for the app to become available
-                    bat 'npm test' // Runs the tests
+                    bat 'npm start &'
+                    bat 'wait-on http://localhost:8090' 
+                    bat 'npm test' 
                 }
             }
         }
